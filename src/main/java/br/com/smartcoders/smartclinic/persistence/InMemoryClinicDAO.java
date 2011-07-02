@@ -12,7 +12,7 @@ import br.com.smartcoders.smartclinic.model.Clinic;
 public class InMemoryClinicDAO implements ClinicDAO {
 
 	private List<Clinic> repo;
-	private static int id = 0;
+	private int id = 1;
 
 	public InMemoryClinicDAO() {
 		repo = new ArrayList<Clinic>();
