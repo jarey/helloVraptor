@@ -10,9 +10,24 @@
 
 	<!-- Shared version number properties -->
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<compiler.source>1.6</compiler.source>
+		<compiler.target>1.6</compiler.target>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<cuke4duke.version>0.4.4</cuke4duke.version>
 	</properties>
+
 	<repositories>
+
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>cukes</id>
+			<url>http://cukes.info/maven</url>
+		</repository>
 		<repository>
 			<id>JBoss</id>
 			<name>jboss-maven2-release-repository</name>
@@ -20,7 +35,90 @@
 		</repository>
 	</repositories>
 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>cukes</id>
+			<url>http://cukes.info/maven</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<database.driver>org.hsqldb.jdbcDriver</database.driver>
+				<database.url>jdbc:hsqldb:file:target/dbms/my-webapp-db</database.url>
+				<database.username>sa</database.username>
+				<database.password></database.password>
+				<webdriver.impl.class>org.openqa.selenium.firefox.FirefoxDriver</webdriver.impl.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>firefox</id>
+			<properties>
+				<webdriver.impl.class>org.openqa.selenium.firefox.FirefoxDriver</webdriver.impl.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>htmlunit</id>
+			<properties>
+				<webdriver.impl.class>org.openqa.selenium.htmlunit.HtmlUnitDriver</webdriver.impl.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>chrome</id>
+			<properties>
+				<webdriver.impl.class>org.openqa.selenium.chrome.ChromeDriver</webdriver.impl.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>ie</id>
+			<properties>
+				<webdriver.impl.class>org.openqa.selenium.ie.InternetExplorerDriver</webdriver.impl.class>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
+		<dependency>
+			<groupId>br.com.caelum.seleniumdsl</groupId>
+			<artifactId>selenium-dsl</artifactId>
+			<version>0.8.5.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-htmlunit</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-firefox</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-ie</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-support</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>cuke4duke</groupId>
+			<artifactId>cuke4duke</artifactId>
+			<version>${cuke4duke.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>br.com.caelum</groupId>
@@ -181,19 +279,74 @@
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>cuke4duke</groupId>
+				<artifactId>cuke4duke-maven-plugin</artifactId>
+				<version>${cuke4duke.version}</version>
+				<configuration>
+					<jvmArgs>
+						<jvmArg>-Dlog4j.configuration=file:///${basedir}/target/test-classes/log4j.xml</jvmArg>
+						<jvmArg>-Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.SpringFactory</jvmArg>
+						<jvmArg>-Dcuke4duke.springXml=cucumber.xml</jvmArg>
+						<jvmArg>-Xmx512m</jvmArg>
+					</jvmArgs>
+					<cucumberArgs>
+						<cucumberArg>--color</cucumberArg>
+						<cucumberArg>--verbose</cucumberArg>
+						<cucumberArg>--strict</cucumberArg>
+						<cucumberArg>--require</cucumberArg>
+						<cucumberArg>${basedir}/target/test-classes</cucumberArg>
+					</cucumberArgs>
+					<gems>
+						<gem>install cuke4duke --version ${cuke4duke.version}</gem>
+					</gems>
+				</configuration>
+				<executions>
+					<execution>
+						<id>run-features</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>cucumber</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>${compiler.source}</source>
+					<target>${compiler.target}</target>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
+				<version>7.2.0</version>
 				<configuration>
 					<webAppConfig>
 						<contextPath>/smartclinic</contextPath>
@@ -201,6 +354,25 @@
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>selenium-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>start-server</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<logOutput>true</logOutput>
+							<background>false</background>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>
