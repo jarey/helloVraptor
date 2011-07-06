@@ -1,5 +1,7 @@
-<%@ include file="/header.jsp" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@taglib prefix="layout" tagdir="/WEB-INF/tags/layout" %>
 
-	It works!! ${variable}
+<layout:page title="">
+	It works!! Acentuação ${variable}
+</layout:page>
 
-<%@ include file="/footer.jsp" %>

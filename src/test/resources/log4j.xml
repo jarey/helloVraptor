@@ -10,12 +10,12 @@
         </appender>
 
         <category name="org.vraptor">
-                <priority value="INFO" />
+                <priority value="ERROR" />
                 <appender-ref ref="stdout" />
         </category>
 
         <category name="com.thoughtworks">
-                <priority value="INFO" />
+                <priority value="ERROR" />
                 <appender-ref ref="stdout" />
         </category>
                 
@@ -25,8 +25,25 @@
         </category>
         
         <category name="org.springframework">
-                <priority value="INFO" />
+                <priority value="ERROR" />
                 <appender-ref ref="stdout" />
         </category>
- 
+        
+        <category name="com.gargoylesoftware.htmlunit">
+            <priority value="ERROR"/>
+            <appender-ref ref="stdout"/>
+        </category>
+
+        <category name="org.apache">
+            <priority value="ERROR"/>
+            <appender-ref ref="stdout"/>
+        </category>
+
+        <category name="httpclient">
+            <priority value="ERROR"/>
+            <appender-ref ref="stdout"/>
+        </category>
+        
+        
+        
 </log4j:configuration>

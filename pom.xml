@@ -82,35 +82,15 @@
 	</profiles>
 	<dependencies>
 		<dependency>
-			<groupId>br.com.caelum.seleniumdsl</groupId>
-			<artifactId>selenium-dsl</artifactId>
-			<version>0.8.5.2</version>
-			<scope>test</scope>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-htmlunit</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-firefox</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-ie</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-support</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.0rc3</version>
 		</dependency>
 
 		<dependency>
@@ -337,6 +317,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>${compiler.source}</source>
 					<target>${compiler.target}</target>
@@ -346,12 +327,11 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>7.2.0</version>
 				<configuration>
 					<webAppConfig>
 						<contextPath>/smartclinic</contextPath>
 					</webAppConfig>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
 				</configuration>
 			</plugin>
 
@@ -367,7 +347,7 @@
 						<phase>pre-integration-test</phase>
 						<configuration>
 							<logOutput>true</logOutput>
-							<background>false</background>
+							<background>true</background>
 						</configuration>
 					</execution>
 				</executions>

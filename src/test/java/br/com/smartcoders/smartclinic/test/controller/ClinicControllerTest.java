@@ -56,7 +56,7 @@ public class ClinicControllerTest {
 	@Test
 	public void shouldExibitAnExistingClinic(){
 		controller.add(aClinic);
-		controller.get(aClinic);
+		controller.show(aClinic);
 		Clinic clinic = result.included("clinic");
 		
 		Assert.assertEquals(aClinic, clinic);

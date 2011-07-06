@@ -1,26 +1,44 @@
-<%@include file="/header.jsp" %>
-	<table border=1>
-		<thead>
-			<tr>
-				<td>Name</td>
-				<td>Address</td>
-				<td>Ações</td>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${clinicList}" var="clinic">
+<%@ page contentType="text/html; charset=UTF-8"%>
+
+<%@ taglib tagdir="/WEB-INF/tags/layout" prefix="layout"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<layout:page title="Clinics">
+	<jsp:attribute name="javascript">
+        <script type="text/javascript">
+             $(document).ready(function(){
+                 
+             });
+        </script>	
+	</jsp:attribute>
+	<jsp:body>
+		<div>
+		<table>
+			<thead>
 				<tr>
-					<form action="clinics/${clinic.id}" method="post" id="form">
-						<input type="hidden" name="_method" value="DELETE" />
-						
+					<td>Name</td>
+					<td>Address</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${clinicList}" var="clinic">
+					<tr>
 						<td>${clinic.name}</td>
 						<td>${clinic.address}</td>
-						<td><input type="submit" value="Apagar" />
-						<a href="clinics/${clinic.id}">Detalhar</a></td>
-					</form>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-	
-<%@include file="/footer.jsp" %> 
+						<td>
+						  <a href="${clinic.id }">Detalhar</a>
+						  <a href="${clinic.id }">Remover</a>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		</div>
+        <div>
+            <a href="new" id="new">New</a>
+        </div>		
+	</jsp:body>
+
+</layout:page>
